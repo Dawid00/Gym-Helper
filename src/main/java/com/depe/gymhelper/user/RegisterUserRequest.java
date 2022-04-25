@@ -19,37 +19,68 @@ public class RegisterUserRequest {
     private String username;
     @NotNull
     private String password;
-    private AthleteInfo info;
+    private Long weight;
+    private Long height;
+    private Integer age;
 
-    String getEmail() {
+
+    public RegisterUserRequest(String email, String username, String password, Long weight, Long height, Integer age) {
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.weight = weight;
+        this.height = height;
+        this.age = age;
+    }
+
+    public RegisterUserRequest() {
+    }
+
+    public Long getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Long weight) {
+        this.weight = weight;
+    }
+
+    public Long getHeight() {
+        return height;
+    }
+
+    public void setHeight(Long height) {
+        this.height = height;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public String getEmail() {
         return email;
     }
 
-    void setEmail(String email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
-    String getUsername() {
+    public String getUsername() {
         return username;
     }
 
-    void setUsername(String username) {
+    public void setUsername(String username) {
         this.username = username;
     }
 
-    String getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    void setPassword(String password) {
+    public void setPassword(String password) {
         this.password = password;
-    }
-
-    AthleteInfo getInfo() {
-        return info;
-    }
-
-    void setInfo(AthleteInfo info) {
-        this.info = info;
     }
 }
