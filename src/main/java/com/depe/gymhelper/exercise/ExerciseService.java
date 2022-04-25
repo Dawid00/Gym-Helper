@@ -44,6 +44,12 @@ public class ExerciseService {
         exerciseRepository.save(exercise);
     }
 
+    @Transactional
+    public void updateExercise(ExerciseDto exerciseDto, Long exerciseId) {
+        var exercise = exerciseRepository.findById(exerciseId).orElseThrow(() -> new ExerciseNotFoundException(exerciseId));
+        exercise.updateByDto(exerciseDto);
+    }
+
     private static Exercise  createRandomExercise(){
         var exercise =  new Exercise();
         Random random = new Random();
@@ -57,9 +63,4 @@ public class ExerciseService {
         return exercise;
     }
 
-    @Transactional
-    public void updateExercise(ExerciseDto exerciseDto, Long exerciseId) {
-        var exercise = exerciseRepository.findById(exerciseId).orElseThrow(() -> new ExerciseNotFoundException(exerciseId));
-        exercise.updateByDto(exerciseDto);
-    }
 }
