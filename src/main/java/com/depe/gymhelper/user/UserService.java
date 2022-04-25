@@ -24,7 +24,7 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void createUser(RegisterUserRequest registerUserRequest) {
+    public Long createUser(RegisterUserRequest registerUserRequest) {
         if(userRepository.existsByUsername(registerUserRequest.getUsername())){
             throw new UserWithUsernameExistsException(registerUserRequest.getUsername());
         }
@@ -32,7 +32,7 @@ public class UserService {
             throw new UserWithEmailExistsException(registerUserRequest.getEmail());
         }
         User user = userFactory.fromUserRegisterDto(registerUserRequest);
-        userRepository.save(user);
+        return userRepository.save(user).getId();
     }
 
     @Transactional
