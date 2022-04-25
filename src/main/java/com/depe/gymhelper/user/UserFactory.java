@@ -12,10 +12,10 @@ class UserFactory {
         this.passwordEncoder = passwordEncoder;
     }
 
-    User fromUserRegisterDto(UserRegisterDto userRegisterDto) {
+    User fromUserRegisterDto(RegisterUserRequest registerUserRequest) {
         roleRepository.save(new Role(RoleType.USER));
-        User user = new User(userRegisterDto.getEmail(), userRegisterDto.getUsername(), passwordEncoder.encode(userRegisterDto.getPassword()),
-                new AthleteInfo(userRegisterDto.getHeight(), userRegisterDto.getAge(), userRegisterDto.getWeight()));
+        User user = new User(registerUserRequest.getEmail(), registerUserRequest.getUsername(), passwordEncoder.encode(registerUserRequest.getPassword()),
+                new AthleteInfo(registerUserRequest.getInfo().getHeight(), registerUserRequest.getInfo().getAge(), registerUserRequest.getInfo().getWeight()));
         user.addRole(roleRepository.findByType(RoleType.USER));
         return user;
     }
