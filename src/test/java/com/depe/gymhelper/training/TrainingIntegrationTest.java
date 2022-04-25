@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 @ActiveProfiles("test")
 @WithMockUser(username = "testUser", password = "testPassword")
-public class TrainingIntegrationTest {
+class TrainingIntegrationTest {
 
 
     @Autowired
