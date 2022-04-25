@@ -13,9 +13,8 @@ class UserFactory {
     }
 
     User fromUserRegisterDto(RegisterUserRequest registerUserRequest) {
-        roleRepository.save(new Role(RoleType.USER));
         User user = new User(registerUserRequest.getEmail(), registerUserRequest.getUsername(), passwordEncoder.encode(registerUserRequest.getPassword()),
-                new AthleteInfo(registerUserRequest.getHeight(), registerUserRequest.getAge(), registerUserRequest.getWeight()));
+                new AthleteInfo(registerUserRequest.getHeight(), registerUserRequest.getWeight()));
         user.addRole(roleRepository.findByType(RoleType.USER));
         return user;
     }
