@@ -33,26 +33,22 @@ public class TrainingService {
     }
 
     public TrainingQueryEntity createTrainingQueryEntityById(Long trainingId) {
-        var training = getTraining(trainingId);
+        var training = getTrainingById(trainingId);
         return new TrainingQueryEntity(training.getId(), training.getDescription());
     }
 
     @Transactional
     public void changeStatus(Long id, String status) {
-        Training training = getTraining(id);
+        Training training = getTrainingById(id);
         switch(status.toUpperCase(Locale.ROOT)){
             case "PLANNED" -> training.setStatus(TrainingStatus.PLANNED);
             case "DONE" -> training.setStatus(TrainingStatus.DONE);
         }
     }
 
-    private Training getTraining(Long id) {
-        return trainingRepository.findById(id).orElseThrow(()-> new TrainingNotFoundException(id));
-    }
-
     @Transactional
     public void updateTraining(Long trainingId, TrainingDto trainingDto) {
-        var training = getTraining(trainingId);
+        var training = getTrainingById(trainingId);
         trainingFactory.updateFromDto(trainingDto, training);
     }
 
@@ -81,7 +77,12 @@ public class TrainingService {
             LocalDateTime to = LocalDateTime.parse(filter.get("to") + DATE_SUFFIX);
             return getTrainingsBetweenDates(from, to, user);
         }
-        return Collections.emptyList();}
+        return Collections.emptyList();
+    }
+
+    private Training getTrainingById(Long id) {
+        return trainingRepository.findById(id).orElseThrow(()-> new TrainingNotFoundException(id));
+    }
 
     private List<TrainingQueryDto> getTrainingsBetweenDates(LocalDateTime from, LocalDateTime to, UserQueryEntity user) {
         return trainingQueryRepository.findAllDtoBetweenDateByUser(from, to, user);
