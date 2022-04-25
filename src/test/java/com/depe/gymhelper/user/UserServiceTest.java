@@ -13,23 +13,20 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.openMocks;
 
-public class UserServiceTest {
+class UserServiceTest {
 
-    @Autowired
     private AuthenticationUserService authenticationUserService;
-    @Autowired
     private UserRepository userRepository;
-    @Autowired
     private RoleRepository roleRepository;
-    @Autowired
     private UserFactory userFactory;
-    @Autowired
     private PasswordEncoder passwordEncoder;
     private UserService underTest;
 
     @BeforeEach
     void setUp() {
+        openMocks(this);
         authenticationUserService = mock(AuthenticationUserService.class);
         userRepository = mock(UserRepository.class);
         roleRepository = mock(RoleRepository.class);
@@ -80,6 +77,7 @@ public class UserServiceTest {
         when(userRepository.existsByUsername(registerUserRequest.getUsername())).thenReturn(false);
         when(userRepository.existsByEmail(registerUserRequest.getEmail())).thenReturn(false);
         when(userFactory.fromUserRegisterDto(registerUserRequest)).thenReturn(user);
+        when(userRepository.save(user)).thenReturn(user);
         underTest.createUser(registerUserRequest);
         //then
         verify(userRepository, times(1)).save(user);
@@ -295,23 +293,4 @@ public class UserServiceTest {
         assertThat(result).hasSize(1).contains(userRole);
     }
 
-
-
 }
-
-//    @Transactional
-//    public void updateLoggedUser(RegisterUserRequest registerUserRequest){
-//        var user = getLoggedUser();
-//        registerUserRequest.setPassword(passwordEncoder.encode(registerUserRequest.getPassword()));
-//        user.updateUserByRequest(registerUserRequest);
-//    }
-//
-//    @Transactional
-//    public void updateUserByUsername(String username, RegisterUserRequest registerUserRequest) {
-//        var user = getUserByUsername(username);
-//        registerUserRequest.setPassword(passwordEncoder.encode(registerUserRequest.getPassword()));
-//        user.updateUserByRequest(registerUserRequest);
-//    }
-//
-
-
