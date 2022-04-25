@@ -3,6 +3,7 @@ package com.depe.gymhelper.auth;
 
 
 
+import com.depe.gymhelper.user.RegisterUserRequest;
 import com.depe.gymhelper.user.UserDetailsServiceImpl;
 import com.depe.gymhelper.user.UserService;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +18,17 @@ class AuthenticationController {
 
     private final TokenService tokenService;
     private final UserDetailsServiceImpl userDetailsService;
+    private final UserService userService;
 
-    AuthenticationController(final TokenService tokenService, final UserDetailsServiceImpl userDetailsService) {
+    AuthenticationController(final TokenService tokenService, final UserDetailsServiceImpl userDetailsService, final UserService userService) {
         this.tokenService = tokenService;
         this.userDetailsService = userDetailsService;
+        this.userService = userService;
+    }
+
+    @PostMapping("/register")
+    void registerUser(@RequestBody RegisterUserRequest registerUserRequest){
+        userService.createUser(registerUserRequest);
     }
 
     @PostMapping("/login")

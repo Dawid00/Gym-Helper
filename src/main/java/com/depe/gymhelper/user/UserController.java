@@ -33,10 +33,7 @@ class UserController {
         this.authenticationUserService = authenticationUserService;
     }
 
-    @PostMapping("/register")
-    void registerUser(@RequestBody RegisterUserRequest registerUserRequest){
-        userService.createUser(registerUserRequest);
-    }
+
 
     @GetMapping()
     @PreAuthorize("hasRole('ROLE_ADMIN')")

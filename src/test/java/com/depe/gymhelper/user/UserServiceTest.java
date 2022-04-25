@@ -42,12 +42,12 @@ class UserServiceTest {
                 "testEmail@gmail.com",
                 "testUsername",
                 "testPassword",
-                new AthleteInfo(185L, 21, 85L));
+                new AthleteInfo(185L, 85L));
         User user2 = new User(
                 "testEmail2@gmail.com",
                 "testUsername2",
                 "testPassword2",
-                new AthleteInfo(180L, 22, 75L));
+                new AthleteInfo(180L, 75L));
         List<User> users = new ArrayList<>();
         users.add(user);
         users.add(user2);
@@ -66,13 +66,12 @@ class UserServiceTest {
         registerUserRequest.setUsername("testUsername");
         registerUserRequest.setPassword("testPassword");
         registerUserRequest.setEmail("testEmail@gmail.com");
-        registerUserRequest.setAge(21);
         registerUserRequest.setHeight(185L);
         registerUserRequest.setWeight(85L);
         User user = new User("testEmail@gmail.com",
                 "testUsername",
                 "testPassword",
-                new AthleteInfo(185L, 21, 85L));
+                new AthleteInfo(185L, 85L));
         //when
         when(userRepository.existsByUsername(registerUserRequest.getUsername())).thenReturn(false);
         when(userRepository.existsByEmail(registerUserRequest.getEmail())).thenReturn(false);
@@ -90,13 +89,12 @@ class UserServiceTest {
         registerUserRequest.setUsername("newUsername");
         registerUserRequest.setPassword("newPassword");
         registerUserRequest.setEmail("newTestEmail@gmail.com");
-        registerUserRequest.setAge(21);
         registerUserRequest.setHeight(185L);
         registerUserRequest.setWeight(85L);
         User user = new User("testEmail@gmail.com",
                 "testUsername",
                 "testPassword",
-                new AthleteInfo(185L, 21, 85L));
+                new AthleteInfo(185L, 85L));
         //when
         when(authenticationUserService.getLoggedUser()).thenReturn(new UserQueryEntity(1L, "testUsername"));
         when(userRepository.findByUsername("testUsername")).thenReturn(Optional.of(user));
@@ -115,13 +113,12 @@ class UserServiceTest {
         registerUserRequest.setUsername("newUsername");
         registerUserRequest.setPassword("newPassword");
         registerUserRequest.setEmail("newTestEmail@gmail.com");
-        registerUserRequest.setAge(21);
         registerUserRequest.setHeight(185L);
         registerUserRequest.setWeight(85L);
         User user = new User("testEmail@gmail.com",
                 "testUsername",
                 "testPassword",
-                new AthleteInfo(185L, 21, 85L));
+                new AthleteInfo(185L, 85L));
         //when
         when(authenticationUserService.getLoggedUser()).thenReturn(new UserQueryEntity(1L, "testUsername"));
         when(userRepository.findByUsername("testUsername")).thenReturn(Optional.of(user));
@@ -172,7 +169,6 @@ class UserServiceTest {
         registerUserRequest.setUsername("newUsername");
         registerUserRequest.setPassword("newPassword");
         registerUserRequest.setEmail("newTestEmail@gmail.com");
-        registerUserRequest.setAge(21);
         registerUserRequest.setHeight(185L);
         registerUserRequest.setWeight(85L);
         //when
@@ -189,7 +185,6 @@ class UserServiceTest {
         registerUserRequest.setUsername("newUsername");
         registerUserRequest.setPassword("newPassword");
         registerUserRequest.setEmail("newTestEmail@gmail.com");
-        registerUserRequest.setAge(21);
         registerUserRequest.setHeight(185L);
         registerUserRequest.setWeight(85L);
         //when

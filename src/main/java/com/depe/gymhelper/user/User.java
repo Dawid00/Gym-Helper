@@ -104,6 +104,6 @@ class User {
         this.email = registerUserRequest.getEmail();
         this.username = registerUserRequest.getUsername();
         this.password = registerUserRequest.getPassword();
-        this.athleteInfo = new AthleteInfo(registerUserRequest.getHeight(), registerUserRequest.getAge(), registerUserRequest.getWeight());
+        this.athleteInfo = new AthleteInfo(registerUserRequest.getHeight(), registerUserRequest.getWeight());
     }
 }

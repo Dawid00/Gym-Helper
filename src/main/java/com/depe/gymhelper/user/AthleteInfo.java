@@ -7,12 +7,10 @@ import javax.persistence.Embeddable;
 class AthleteInfo {
     private Long weight;
     private Long height;
-    private Integer age;
 
-    AthleteInfo(Long height, Integer age, Long weight) {
+    AthleteInfo(Long height, Long weight) {
         this.weight = weight;
         this.height = height;
-        this.age = age;
     }
 
     public AthleteInfo() {
@@ -33,13 +31,5 @@ class AthleteInfo {
 
     void setHeight(Long height) {
         this.height = height;
-    }
-
-    Integer getAge() {
-        return age;
-    }
-
-    void setAge(Integer age) {
-        this.age = age;
     }
 }

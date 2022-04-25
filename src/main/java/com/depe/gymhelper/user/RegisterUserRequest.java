@@ -21,16 +21,14 @@ public class RegisterUserRequest {
     private String password;
     private Long weight;
     private Long height;
-    private Integer age;
 
 
-    public RegisterUserRequest(String email, String username, String password, Long weight, Long height, Integer age) {
+    public RegisterUserRequest(String email, String username, String password, Long weight, Long height) {
         this.email = email;
         this.username = username;
         this.password = password;
         this.weight = weight;
         this.height = height;
-        this.age = age;
     }
 
     public RegisterUserRequest() {
@@ -50,14 +48,6 @@ public class RegisterUserRequest {
 
     public void setHeight(Long height) {
         this.height = height;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
     }
 
     public String getEmail() {

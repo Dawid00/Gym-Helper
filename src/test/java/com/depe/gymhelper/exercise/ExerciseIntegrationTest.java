@@ -49,8 +49,7 @@ public class ExerciseIntegrationTest {
                 "testUser",
                 "testPassword",
                 85L,
-                185L,
-                22
+                185L
         );
         Long id = userService.createUser(registerRequest);
         return new UserQueryEntity(id, "testUser");
