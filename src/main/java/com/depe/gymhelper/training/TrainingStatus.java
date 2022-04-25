@@ -1,6 +1,6 @@
 package com.depe.gymhelper.training;
 
-enum TrainingStatus {
+public enum TrainingStatus {
     DONE("DONE"), PLANNED("PLANNED");
 
     final String status;
