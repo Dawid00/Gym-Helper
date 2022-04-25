@@ -1,8 +1,14 @@
 package com.depe.gymhelper.user;
 
-
-
-import javax.persistence.*;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -37,12 +43,6 @@ class User {
         return roles;
     }
 
-    void addRole(Role role){
-        if(roles.contains(role)){
-            return;
-        }
-        roles.add(role);
-    }
     void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
@@ -85,5 +85,23 @@ class User {
 
     void setAthleteInfo(AthleteInfo athleteInfo) {
         this.athleteInfo = athleteInfo;
+    }
+
+    void addRole(Role role){
+        if(roles.contains(role)){
+            return;
+        }
+        roles.add(role);
+    }
+
+    void removeRole(Role admin) {
+        roles.remove(admin);
+    }
+
+    void updateUserByRequest(RegisterUserRequest registerUserRequest) {
+        this.email = registerUserRequest.getEmail();
+        this.username = registerUserRequest.getUsername();
+        this.password = registerUserRequest.getPassword();
+        this.athleteInfo = registerUserRequest.getInfo();
     }
 }
