@@ -1,6 +1,6 @@
 package com.depe.gymhelper.auth;
 
-class AuthenticationResponseDto {
+public class AuthenticationResponseDto {
     private String token;
 
     public AuthenticationResponseDto(String token) {
@@ -11,7 +11,7 @@ class AuthenticationResponseDto {
         return token;
     }
 
-    void setToken(String token) {
+    public void setToken(String token) {
         this.token = token;
     }
 }
