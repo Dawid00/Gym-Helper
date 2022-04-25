@@ -2,12 +2,12 @@ package com.depe.gymhelper.exercise;
 
 public class ExerciseDto {
 
-    private int sets;
+    private Integer sets;
     private Double weight;
     private Integer reps;
     private ExerciseType type;
 
-    public ExerciseDto(int sets, Double weight, Integer reps, ExerciseType type) {
+    public ExerciseDto(Integer sets, Double weight, Integer reps, ExerciseType type) {
         this.sets = sets;
         this.weight = weight;
         this.reps = reps;
@@ -30,7 +30,7 @@ public class ExerciseDto {
         this.type = type;
     }
 
-    public int getSets() {
+    public Integer getSets() {
         return sets;
     }
 
