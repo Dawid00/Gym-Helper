@@ -1,6 +1,12 @@
 package com.depe.gymhelper.user;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 
 @Entity
 @Table(name="roles")
@@ -12,7 +18,11 @@ class Role {
     @Enumerated(EnumType.STRING)
     private RoleType type;
 
-    public Role( RoleType type) {
+    Role(Long id, RoleType type) {
+        this.id = id;
+        this.type = type;
+    }
+    Role(RoleType type){
         this.type = type;
     }
 

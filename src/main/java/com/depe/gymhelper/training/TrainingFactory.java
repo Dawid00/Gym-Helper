@@ -21,7 +21,7 @@ class TrainingFactory {
 
 
     public void updateFromDto(TrainingDto trainingDto, Training training) {
-        training.setStatus(training.getStatus());
+        training.setStatus(trainingDto.getStatus());
         training.setDate(trainingDto.getDate());
         training.setDescription(trainingDto.getDescription());
     }
