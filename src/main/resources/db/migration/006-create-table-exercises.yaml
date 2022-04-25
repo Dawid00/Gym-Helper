@@ -1,0 +1,42 @@
+databaseChangeLog:
+  -  changeSet:
+       id:  007-create-table-exercises
+       author:  depe
+       changes:
+         -  createTable:
+              tableName: exercises
+              columns:
+                -  column:
+                     name:  id
+                     type:  bigint
+                     constraints:
+                       primaryKeyName: exercises_pk
+                       primaryKey: true
+                       nullable: false
+                - column:
+                     name: type
+                     type: text
+                     constraints:
+                       nullable: false
+                -  column:
+                     name:  series
+                     type:  int
+                     constraints:
+                       nullable: false
+                -  column:
+                     name:  reps
+                     type:  int
+                     constraints:
+                       nullable: false
+                -  column:
+                     name: weight
+                     type: real
+                     constraints:
+                       nullable: false
+                - column:
+                    name: training_id
+                    type: bigint
+                    constraints:
+                      nullable: false
+                      foreignKeyName: fk_exercises_trainings
+                      references: trainings(id)

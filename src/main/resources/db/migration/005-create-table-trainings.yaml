@@ -1,0 +1,35 @@
+databaseChangeLog:
+  -  changeSet:
+       id:  006-create-table-trainings
+       author:  depe
+       changes:
+         -  createTable:
+              tableName:  trainings
+              columns:
+                -  column:
+                     name:  id
+                     type:  bigint
+                     constraints:
+                       primaryKeyName: trainings_pk
+                       primaryKey:  true
+                       nullable:  false
+                -  column:
+                     name:  description
+                     type:  varchar(50)
+                -  column:
+                     name:  status
+                     type:  text
+                     constraints:
+                       nullable: false
+                -  column:
+                     name: date
+                     type: timestamp
+                     constraints:
+                       nullable: false
+                - column:
+                    name: user_id
+                    type: bigint
+                    constraints:
+                      nullable: false
+                      foreignKeyName: fk_trainings_users
+                      references: users(id)

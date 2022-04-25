@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+<include file="/db/migration/001-create-hibernate-sequence.sql"/>
+<include file="/db/migration/002-create-table-users.sql"/>
+<include file="/db/migration/003-create-table-roles.sql"/>
+<include file="/db/migration/004-create-table-users_roles.sql"/>
+<include file="/db/migration/005-create-table-trainings.yaml"/>
+<include file="/db/migration/006-create-table-exercises.yaml"/>
+
+</databaseChangeLog>
