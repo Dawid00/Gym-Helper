@@ -94,14 +94,16 @@ class User {
         roles.add(role);
     }
 
-    void removeRole(Role admin) {
-        roles.remove(admin);
+    void removeRole(Role role) {
+        if(roles.contains(role)){
+            roles.remove(role);
+        }
     }
 
     void updateUserByRequest(RegisterUserRequest registerUserRequest) {
         this.email = registerUserRequest.getEmail();
         this.username = registerUserRequest.getUsername();
         this.password = registerUserRequest.getPassword();
-        this.athleteInfo = registerUserRequest.getInfo();
+        this.athleteInfo = new AthleteInfo(registerUserRequest.getHeight(), registerUserRequest.getAge(), registerUserRequest.getWeight());
     }
 }
