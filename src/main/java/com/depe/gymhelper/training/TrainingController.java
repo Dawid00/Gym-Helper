@@ -1,9 +1,6 @@
 package com.depe.gymhelper.training;
 
-import com.depe.gymhelper.exercise.ExerciseQueryDto;
-import com.depe.gymhelper.exercise.ExerciseQueryRepository;
 import com.depe.gymhelper.user.AuthenticationUserService;
-import com.depe.gymhelper.user.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,24 +21,21 @@ class TrainingController {
 
     private final TrainingService trainingService;
     private final TrainingQueryRepository trainingQueryRepository;
-    private final ExerciseQueryRepository exerciseQueryRepository;
-    private final UserService userService;
     private final AuthenticationUserService authenticationUserService;
 
     public TrainingController(
             final TrainingService trainingService,
             final TrainingQueryRepository trainingQueryRepository,
-            final ExerciseQueryRepository exerciseQueryRepository,
-            final UserService userService,
             final AuthenticationUserService authenticationUserService) {
         this.trainingService = trainingService;
         this.trainingQueryRepository = trainingQueryRepository;
-        this.exerciseQueryRepository = exerciseQueryRepository;
-        this.userService = userService;
         this.authenticationUserService = authenticationUserService;
     }
 
-
+    @GetMapping
+    ResponseEntity<List<TrainingQueryDto>> getTrainings() {
+        return ResponseEntity.ok(trainingQueryRepository.findAllTrainingDtoByUser(authenticationUserService.getLoggedUser()));
+    }
 
     @GetMapping("/{id}")
     ResponseEntity<TrainingQueryDto> getTrainingById(@PathVariable Long id) {
@@ -49,16 +43,6 @@ class TrainingController {
                 trainingQueryRepository.findDtoByIdAndUser(
                     id,
                     authenticationUserService.getLoggedUser()).orElseThrow(() -> new TrainingNotFoundException(id)));
-    }
-
-    @GetMapping("/{trainingId}/exercises")
-    ResponseEntity<List<ExerciseQueryDto>> getExercisesFromTraining(@PathVariable Long trainingId) {
-        return ResponseEntity.ok(exerciseQueryRepository.findAllDtoByTrainingId(trainingId));
-    }
-
-    @GetMapping
-    ResponseEntity<List<TrainingQueryDto>> getTrainings() {
-       return ResponseEntity.ok(trainingQueryRepository.findAllTrainingDtoByUser(authenticationUserService.getLoggedUser()));
     }
 
     @GetMapping("/filter")
@@ -88,7 +72,5 @@ class TrainingController {
         trainingService.deleteTraining(id);
         return ResponseEntity.noContent().build();
     }
-
-
 
 }
