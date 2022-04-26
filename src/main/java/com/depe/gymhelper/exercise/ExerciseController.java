@@ -12,9 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
-@RequestMapping("/api/exercises")
+@RequestMapping("/api")
 class ExerciseController {
 
     private final ExerciseService exerciseService;
@@ -27,38 +28,43 @@ class ExerciseController {
         this.exerciseQueryRepository = exerciseQueryRepository;
     }
 
-    @PostMapping("/{trainingId}")
+    @GetMapping("/exercises/all-type")
+    ResponseEntity<ExerciseType[]> getAllTypeOfExercises(){
+        return ResponseEntity.ok(exerciseService.getAllTypeOfExercises());
+    }
+
+    @GetMapping("/trainings/{trainingId}/exercises")
+    ResponseEntity<List<ExerciseQueryDto>> getExercisesFromTraining(@PathVariable Long trainingId) {
+        return ResponseEntity.ok(exerciseQueryRepository.findAllDtoByTrainingId(trainingId));
+    }
+
+    @GetMapping("/exercises/{id}")
+    ResponseEntity<ExerciseQueryDto> getExerciseById(@PathVariable Long id){
+        return ResponseEntity.ok(exerciseQueryRepository.findDtoById(id).orElseThrow(RuntimeException::new));
+    }
+
+    @PostMapping("/trainings/{trainingId}/exercises")
     ResponseEntity<Long> createExerciseWithTraining(@RequestBody ExerciseDto exerciseDto, @PathVariable Long trainingId){
         var training = trainingService.createTrainingQueryEntityById(trainingId);
         return ResponseEntity.ok(exerciseService.addExerciseWithTraining(exerciseDto, training));
     }
 
-    @GetMapping("/{id}")
-    ResponseEntity<ExerciseQueryDto> getExerciseById(@PathVariable Long id){
-        return ResponseEntity.ok(exerciseQueryRepository.findDtoById(id).orElseThrow(RuntimeException::new));
-    }
-
-    @GetMapping("/all-type")
-    ResponseEntity<ExerciseType[]> getAllTypeOfExercises(){
-        return ResponseEntity.ok(exerciseService.getAllTypeOfExercises());
-    }
-
-    @DeleteMapping("{id}")
-    ResponseEntity<?> deleteExercise(Long id) {
-        exerciseService.deleteExerciseById(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    @PostMapping("/random/{trainingId}")
+    @PostMapping("/trainings/{trainingId}/exercises/random")
     ResponseEntity<?> addRandomExerciseToTrainingWithId(@PathVariable Long trainingId){
         var training = trainingService.createTrainingQueryEntityById(trainingId);
         exerciseService.addRandomExerciseToTraining(training);
         return ResponseEntity.status(204).build();
     }
 
-    @PutMapping("/trainings/{trainingId}/exercises/{exerciseId}")
-    ResponseEntity<?> updateExerciseByIdBelongsToTrainingWithId(@PathVariable Long trainingId, @PathVariable Long exerciseId, @Valid @RequestBody ExerciseDto exerciseDto){
-        exerciseService.updateExercise(exerciseDto, exerciseId);
+    @PutMapping("/exercises/{id}")
+    ResponseEntity<?> updateExerciseById( @PathVariable Long id, @Valid @RequestBody ExerciseDto exerciseDto){
+        exerciseService.updateExercise(exerciseDto, id);
         return ResponseEntity.status(204).build();
+    }
+
+    @DeleteMapping("/exercises/{id}")
+    ResponseEntity<?> deleteExercise(Long id) {
+        exerciseService.deleteExerciseById(id);
+        return ResponseEntity.noContent().build();
     }
 }
