@@ -32,6 +32,7 @@ public class UserService {
             throw new UserWithEmailExistsException(registerUserRequest.getEmail());
         }
         User user = userFactory.fromUserRegisterDto(registerUserRequest);
+        user.addRole(roleRepository.findByType(RoleType.USER));
         return userRepository.save(user).getId();
     }
 
