@@ -63,7 +63,9 @@ public class UserService {
     public void updateLoggedUser(RegisterUserRequest registerUserRequest){
         var user = getLoggedUser();
         registerUserRequest.setPassword(passwordEncoder.encode(registerUserRequest.getPassword()));
-        user.updateUserByRequest(registerUserRequest);
+        if(isEmailAvailable(registerUserRequest.getEmail()) && isUsernameAvailable(registerUserRequest.getUsername())){
+            user.updateUserByRequest(registerUserRequest);
+        }
     }
 
     @Transactional
