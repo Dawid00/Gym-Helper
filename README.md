@@ -5,6 +5,11 @@ and available at https://gym-helper-dp.herokuapp.com/api
 
 I've used:
 Java, Spring Boot, PostgreSql, Liquibase
+
+TODO:
+* more tests
+* validation for password
+* exception handlers
 ## Table of contents
 * [Description](#Description)
 * [Endpoints](#Endpoints)
