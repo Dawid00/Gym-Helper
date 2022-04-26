@@ -5,12 +5,16 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-class UsernameRequest {
+public class UsernameRequest {
 
     @NotNull(message = "Username is mandatory")
     @NotBlank
     @Length(min = 5, max = 25, message = "Username must have 5-25 characters")
     private String username;
+
+    public UsernameRequest(String username) {
+        this.username = username;
+    }
 
     public String getUsername() {
         return username;

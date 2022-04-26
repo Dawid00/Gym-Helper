@@ -33,8 +33,6 @@ class UserController {
         this.authenticationUserService = authenticationUserService;
     }
 
-
-
     @GetMapping()
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<User>> getAllUsers() {
@@ -55,17 +53,6 @@ class UserController {
     @GetMapping("/{username}/info")
     ResponseEntity<UserQueryDto> getInfoAboutUserByUsername(@PathVariable String username) {
         return ResponseEntity.ok(userQueryRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(username)));
-    }
-
-
-    @GetMapping("/check/username")
-    ResponseEntity<Boolean> isUsernameAvailable(@Valid @RequestBody UsernameRequest usernameRequest) {
-        return ResponseEntity.ok(userService.isUsernameAvailable(usernameRequest.getUsername()));
-    }
-
-    @GetMapping("/check/email")
-    ResponseEntity<Boolean> isEmailAvailable(@Valid @RequestBody EmailRequest emailRequest) {
-        return ResponseEntity.ok(userService.isEmailAvailable(emailRequest.getEmail()));
     }
 
     @PostMapping()

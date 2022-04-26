@@ -3,14 +3,14 @@ package com.depe.gymhelper.auth;
 
 
 
+import com.depe.gymhelper.user.EmailRequest;
 import com.depe.gymhelper.user.RegisterUserRequest;
-import com.depe.gymhelper.user.UserDetailsServiceImpl;
 import com.depe.gymhelper.user.UserService;
+import com.depe.gymhelper.user.UsernameRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -32,5 +32,15 @@ class AuthenticationController {
     @PostMapping("/login")
     ResponseEntity<AuthenticationResponseDto> loginUser(@RequestBody AuthenticationRequestDto authenticationRequestDto){
         return ResponseEntity.ok(authenticationService.authenticateUser(authenticationRequestDto));
+    }
+
+    @GetMapping("/check/username")
+    ResponseEntity<Boolean> isUsernameAvailable(@Valid @RequestBody UsernameRequest usernameRequest) {
+        return ResponseEntity.ok(userService.isUsernameAvailable(usernameRequest.getUsername()));
+    }
+
+    @GetMapping("/check/email")
+    ResponseEntity<Boolean> isEmailAvailable(@Valid @RequestBody EmailRequest emailRequest) {
+        return ResponseEntity.ok(userService.isEmailAvailable(emailRequest.getEmail()));
     }
 }
