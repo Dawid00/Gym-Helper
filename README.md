@@ -131,12 +131,8 @@ I used JWT for authorization user.
   "email": "robert@gmail.com",
   "username": "rebo18",
   "password": "Password17!",
-  "info": {
-    "firstname": "Robert",
-    "lastname": "Rogal",
-    "height": 176,
-    "weight": 75
-  }
+  "height": 176,
+  "weight": 75
 }
 ```
 ##### <a id="userupdatebyadmin">Update user with username by admin : /api/users/{username}</a>
@@ -177,7 +173,7 @@ I used JWT for authorization user.
 ```json
 {
   "description": "Motivation does not exist",
-  "date": "2022-02-12T16:09:49.398Z",
+  "date": "2022-02-12T16:09:49.000",
   "status": "DONE",
   "exercises": [
     {
