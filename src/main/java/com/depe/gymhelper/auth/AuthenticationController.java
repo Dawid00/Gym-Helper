@@ -16,13 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/auth")
 class AuthenticationController {
 
-    private final TokenService tokenService;
-    private final UserDetailsServiceImpl userDetailsService;
+    private final AuthenticationService authenticationService;
     private final UserService userService;
 
-    AuthenticationController(final TokenService tokenService, final UserDetailsServiceImpl userDetailsService, final UserService userService) {
-        this.tokenService = tokenService;
-        this.userDetailsService = userDetailsService;
+    AuthenticationController(final AuthenticationService authenticationService, final UserService userService) {
+        this.authenticationService = authenticationService;
         this.userService = userService;
     }
 
@@ -33,6 +31,6 @@ class AuthenticationController {
 
     @PostMapping("/login")
     ResponseEntity<AuthenticationResponseDto> loginUser(@RequestBody AuthenticationRequestDto authenticationRequestDto){
-        return ResponseEntity.ok(new AuthenticationResponseDto(tokenService.createToken(userDetailsService.loadUserByUsername(authenticationRequestDto.getUsername()))));
+        return ResponseEntity.ok(authenticationService.authenticateUser(authenticationRequestDto));
     }
 }

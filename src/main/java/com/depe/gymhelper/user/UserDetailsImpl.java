@@ -7,24 +7,36 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.*;
 import java.util.stream.Collectors;
 
-class UserDetailsImpl implements UserDetails {
+public class UserDetailsImpl implements UserDetails {
 
+    private final Long id;
     private final String username;
+    private final String email;
     private final String password;
     private final Set<GrantedAuthority> authorities;
 
 
 
     UserDetailsImpl(User user) {
+        this.id = user.getId();
         this.username = user.getUsername();
         this.password = user.getPassword();
         this.authorities = authoritiesFromRoles(user.getRoles());
+        this.email = user.getEmail();
     }
 
     private static Set<GrantedAuthority> authoritiesFromRoles(Set<Role> roles){
         return roles.stream()
                 .map(role -> new SimpleGrantedAuthority(role.getType().getName()))
                 .collect(Collectors.toSet());
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     @Override
