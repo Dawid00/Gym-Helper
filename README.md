@@ -1,10 +1,9 @@
 # Gym-Helper
 It is my first project to learn how create application using Spring Boot.
-I've deployed the project on Heroku.
-It's available at https://gym-helper-dp.herokuapp.com/api
+I've tried to build feature-by-package architecture. The project is developed on Heroku
+and available at https://gym-helper-dp.herokuapp.com/api
 
-I have used:
-
+I've used:
 Java, Spring Boot, PostgreSql, Liquibase
 ## Table of contents
 * [Description](#Description)
@@ -12,7 +11,7 @@ Java, Spring Boot, PostgreSql, Liquibase
 ## Description
 This project allows you to easily save the results from the gym trainings.
 You can:
-* register and login as user 
+* register and login as user
 * save your planned or done trainings with exercises
 * see history of trainings
 * see list of example type of exercises
@@ -32,6 +31,9 @@ I used JWT for authorization user.
 | ------ | --- | ---------- | --------------------------- |
 | POST   | /api/auth/register| Sign up | [JSON](#register) |
 | POST   | /api/auth/login | Log in | [JSON](#login) |
+| GET    | /api/users/check/username | Check if username is available to register |[JSON](#checkusername) |
+| GET    | /api/users/check/email | Check if email is available to register |[JSON](#checkemail) |
+
 
 ### Users
 
@@ -41,8 +43,6 @@ I used JWT for authorization user.
 | GET    | /api/users/me/info | Get logged in user info | |
 | GET    | /api/users/{username}/info | Get info about user by username | |
 | GET    | /api/users/{username}/trainings | Get trainings created by user | |
-| GET    | /api/users/check/username | Check if username is available to register |[JSON](#checkusername) |
-| GET    | /api/users/check/email | Check if email is available to register |[JSON](#checkemail) |
 | POST   | /api/users | Add user (Only for admin) | [JSON](#usercreate) |
 | PUT  | /api/users/{username} | Update user (By admin) | [JSON](#userupdatebyadmin) |
 | PUT    | /api/users/ | Update user (By logged in user) | [JSON](#userupdate) |
@@ -55,29 +55,27 @@ I used JWT for authorization user.
 
 ### Trainings
 
-| Method | Url | Description | Example Valid Request Body |
-| ------ | --- | ----------- | ------------------------- |
-| GET    | /api/trainings | Get all trainings belong to log in user | |
+| Method | Url | Description                                        | Example Valid Request Body |
+| ------ | --- |----------------------------------------------------| ------------------------- |
+| GET    | /api/trainings | Get all trainings belong to log in user            | |
 | GET    | /api/trainings/{id} | Get training belongs to log in user by training id | |
-| GET    | /api/trainings/filter | Get filtered trainings | |
-| GET    | /api/trainings/export/csv | Export filtered trainings to csv | |
-| POST   | /api/trainings | Create new training | [JSON](#trainingcreate) |
-| PATCH    | /api/trainings/{id}/skipped | Set training status to SKIPPED  | |
-| PATCH    | /api/trainings/{id}/done | Set training status to DONE | |
-| PUT    | /api/trainings/{id} | Update training  | [JSON](#trainingupdate) |
-| DELETE | /api/trainings/{id} | Delete training  | |
+| GET    | /api/trainings/filter | Get filtered trainings                             | |
+| POST   | /api/trainings | Create new training                                | [JSON](#trainingcreate) |
+| PATCH    | /api/trainings/{id}| Change training status                             | |
+| PUT    | /api/trainings/{id} | Update training                                    | [JSON](#trainingupdate) |
+| DELETE | /api/trainings/{id} | Delete training                                    | |
 
 ### Exercises
 
-| Method | Url | Description | Example Valid Request Body |
-| ------ | --- | ----------- | ------------------------- |
-| GET    | /api/exercises/all-type | Get all types of exercises | |
-| GET    | /api/trainings/{trainingId}/exercises | Get all exercises which belongs to training with id = trainingId | |
-| GET    | /api/trainings/{trainingId}/exercises/{exerciseId} | Get exercise by id if it belongs to training with id = trainingId | |
-| POST   | /api/trainings/{trainingId}/exercises | Create new exercise for training with id = trainingId | [JSON](#exercisecreate) |
+| Method | Url                                          | Description | Example Valid Request Body |
+| ------ |----------------------------------------------| ----------- | ------------------------- |
+| GET    | /api/exercises/all-type                      | Get all types of exercises | |
+| GET    | /api/trainings/{trainingId}/exercises        | Get all exercises which belongs to training with id = trainingId | |
+| GET    | /api/exercises/{id}                          | Get exercise by id if it belongs to training with id = trainingId | |
+| POST   | /api/trainings/{trainingId}/exercises        | Create new exercise for training with id = trainingId | [JSON](#exercisecreate) |
 | POST   | /api/trainings/{trainingId}/exercises/random | Create new random exercise for training with id = trainingId | [JSON](#exercisecreate) |
-| PUT    | /api/trainings/{trainingId}/exercises/{exerciseId} | Update exercise by id if it belongs to training with id = trainingId  | [JSON](#exerciseupdate) |
-| DELETE | /api/trainings/{trainingId}/exercises/{exerciseId} | Delete exercise by id if it belongs to training with id = trainingId  | |
+| PUT    | /api/exercises/{id}                          | Update exercise by id if it belongs to training with id = trainingId  | [JSON](#exerciseupdate) |
+| DELETE | /api/exercises/{id}                          | Delete exercise by id if it belongs to training with id = trainingId  | |
 
 
 ##### <a id="register">Register -> /api/auth/register</a>
@@ -93,39 +91,23 @@ I used JWT for authorization user.
 ##### <a id="login">Log in : /api/auth/login</a>
 ```json
 {
-	"username": "dawid00",
-	"password": "Testowe10!"
-}
-```
-##### Response Body
-```json
-{
-  "accessToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkYXdpZCIsImlhdCI6MTY0NTcwOTU1OCwiZXhwIjoxNjQ1NzQ1NTU4fQ.mQrM9PBrZsHAqvOLsp2EpBrgfS19RGroI7spr5A6uwCLGWFtdgIKdWn3IJ7OfwCOmK-Zbx1byVCjHOKHagP94w",
-  "id": 1,
   "username": "dawid00",
-  "email": "dawid@gmail.com",
-  "roles": [
-    "ROLE_USER","ROLE_ADMIN"
-  ],
-  "type": "Bearer"
-}
-```
-
-##### <a id="refreshtoken">Refresh token : /api/auth/refresh-token</a>
-```json
-{
-  "refreshToken": "01ade098-ea3e-4594-802d-4d3b5a921707"
+  "password": "Testowe10!"
 }
 ```
 ##### Response Body
 ```json
 {
-  "accessToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkYXdpZCIsImlhdCI6MTY0NTcyMTc2NiwiZXhwIjoxNjQ1NzU3NzY2fQ.tyutfztKrSFJPsl8zvArS4E5YThPyqRfIJNtbWBFgiBGjyRVz8ItwifKGpTaBlDyZk_6v5oTlN__CGb9VF2zPg",
-  "refreshToken": "01ade098-ea3e-4594-802d-4d3b5a921707",
-  "tokenType": "Bearer"
+    "token":"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkYXdpZDEyMyIsImlhdCI6MTY1MTAwMDczMSwiZXhwIjoxNjUxMDM2NzMxfQ.yLT8X2M6ub2q1Tc_Ifph_7Qs2tDzYLuQmzdCy0vXQO8UJv_wTHYqwqPebf7KSWB6RYerV8-ZqIv7s0EpoLMxWQ",
+    "id": 1,
+    "username": "dawid00",
+    "email": "dawid@gmail.com",
+    "roles": [
+        "ROLE_USER"
+    ],
+    "type": "Bearer"
 }
 ```
-
 
 
 
@@ -157,19 +139,16 @@ I used JWT for authorization user.
   }
 }
 ```
-##### <a id="userupdatebyadmin">Update user with username by admin : /api/users/{username}</a> 
+##### <a id="userupdatebyadmin">Update user with username by admin : /api/users/{username}</a>
 ```json
 {
   "email": "robert123@gmail.com",
   "username": "rebo18",
   "password": "Password17!",
-  "info": {
-    "firstname": "Robert",
-    "lastname": "Rogal",
-    "height": 176,
-    "weight": 85
-  }
+  "height": 176,
+  "weight": 85
 }
+
 ```
 ##### <a id="userupdate">Update user : /api/users</a>
 ```json
@@ -177,25 +156,21 @@ I used JWT for authorization user.
   "email": "robert123@gmail.com",
   "username": "rebo18",
   "password": "Password17!",
-  "info": {
-    "firstname": "Robert",
-    "lastname": "Rogal",
-    "height": 176,
-    "weight": 80
-  }
+  "height": 176,
+  "weight": 80
 }
 ```
 ##### <a id="changepassword">Change password : /api/auth/change/password</a>
 ```json
 {
-	"password": "Footballer29!"
+  "password": "Footballer29!"
 }
 ```
 
 ##### <a id="changeemail">Change Email : /api/auth/change/email</a>
 ```json
 {
-	"email": "katar2022@gmail.com"
+  "email": "katar2022@gmail.com"
 }
 ```
 ##### <a id="trainingcreate">Create new training : /api/trainings</a>
