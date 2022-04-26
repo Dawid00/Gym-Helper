@@ -43,6 +43,7 @@ public class TrainingService {
         switch(status.toUpperCase(Locale.ROOT)){
             case "PLANNED" -> training.setStatus(TrainingStatus.PLANNED);
             case "DONE" -> training.setStatus(TrainingStatus.DONE);
+            default -> throw new IllegalArgumentException("wrong status:" + status);
         }
     }
 
