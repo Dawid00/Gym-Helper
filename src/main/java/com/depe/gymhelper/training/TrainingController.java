@@ -53,7 +53,7 @@ class TrainingController {
     }
 
     @PostMapping
-    ResponseEntity<Long> createTraining(@RequestBody @Valid TrainingDto TrainingDto) {
+    ResponseEntity<Long> createTraining( @Valid @RequestBody TrainingDto TrainingDto) {
         return ResponseEntity.ok(trainingService.addTraining(TrainingDto));
     }
 
