@@ -1,9 +1,6 @@
 package com.depe.gymhelper.training;
 
-
-import com.depe.gymhelper.user.AuthenticationUserService;
 import com.depe.gymhelper.user.RegisterUserRequest;
-
 import com.depe.gymhelper.user.UserQueryEntity;
 import com.depe.gymhelper.user.UserService;
 import org.junit.jupiter.api.Test;
@@ -101,22 +98,6 @@ class TrainingIntegrationTest {
         assertThat(result.getDescription()).isEqualTo("JTCNW");
     }
 
-
-    @ParameterizedTest()
-    @MethodSource("provideTrainingStatus")
-    void shouldChangeStatus(TrainingStatus status, String newStatus) {
-        //given
-        var user = initDatabaseWithTestUser();
-        TrainingDto trainingDto = new TrainingDto("JTCNW", status, LocalDateTime.now());
-        var training = trainingFactory.fromDto(trainingDto, user);
-        Long id = trainingRepository.save(training).getId();
-        TrainingStatus newTrainingStatus = TrainingStatus.valueOf(newStatus.toUpperCase(Locale.ROOT));
-        //when
-        underTest.changeStatus(id, newStatus);
-        //then
-        assertThat(training.getStatus()).isEqualTo(newTrainingStatus);
-    }
-
     @Test
     void shouldReturnEmptyOfTrainingAfterDeleteTraining() {
         //given
@@ -143,7 +124,7 @@ class TrainingIntegrationTest {
 
 
     @ParameterizedTest
-    @MethodSource("provideFilters")
+    @MethodSource("provideFiltersForTraining")
     void shouldReturnListOfFilteredTrainingQueryDto(String from, String to, TrainingStatus trainingStatus, int size) {
         initDatabaseWithTrainings();
         Map<String, String> dateFilter = new HashMap<>();
@@ -157,11 +138,25 @@ class TrainingIntegrationTest {
                         Map.Entry::getKey,
                         Map.Entry::getValue));
         var result = underTest.getFilteredTrainings(filter);
-        System.out.println(result);
         assertThat(result).hasSize(size);
     }
 
-    private static Stream<Arguments> provideFilters() {
+    @ParameterizedTest()
+    @MethodSource("provideTrainingStatus")
+    void shouldChangeStatus(TrainingStatus status, String newStatus) {
+        //given
+        var user = initDatabaseWithTestUser();
+        TrainingDto trainingDto = new TrainingDto("JTCNW", status, LocalDateTime.now());
+        var training = trainingFactory.fromDto(trainingDto, user);
+        Long id = trainingRepository.save(training).getId();
+        TrainingStatus newTrainingStatus = TrainingStatus.valueOf(newStatus.toUpperCase(Locale.ROOT));
+        //when
+        underTest.changeStatus(id, newStatus);
+        //then
+        assertThat(training.getStatus()).isEqualTo(newTrainingStatus);
+    }
+
+        private static Stream<Arguments> provideFiltersForTraining() {
         return Stream.of(
                 Arguments.of("2022-04-09", "2022-04-11", DONE, 1),
                 Arguments.of("2022-04-09", "2022-04-11", PLANNED, 0),
