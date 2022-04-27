@@ -10,6 +10,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "exercises")
@@ -18,10 +21,20 @@ class Exercise {
     @Id
     @GeneratedValue
     private Long id;
+    @NotNull(message = "Exercise must have type")
     @Enumerated(EnumType.STRING)
     private ExerciseType type;
+    @NotNull
+    @Min(value = 1, message = "Exercise must have minimum 1 series")
+    @Max(value = 100,  message = "Exercise must have maximum 100 series")
     private Integer sets;
+    @NotNull
+    @Min(value = 0, message = "Exercise must have minimum 0 kg")
+    @Max(value = 500,  message = "Exercise must have maximum 500 kg")
     private Double weight;
+    @NotNull
+    @Min(value = 1, message = "Exercise must have minimum 1 repetition")
+    @Max(value = 100,  message = "Exercise must have maximum 100 repetition")
     private Integer reps;
     @ManyToOne
     @JoinColumn(name = "training_id")

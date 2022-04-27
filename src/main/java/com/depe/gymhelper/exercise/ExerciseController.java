@@ -44,7 +44,7 @@ class ExerciseController {
     }
 
     @PostMapping("/trainings/{trainingId}/exercises")
-    ResponseEntity<Long> createExerciseWithTraining(@RequestBody ExerciseDto exerciseDto, @PathVariable Long trainingId){
+    ResponseEntity<Long> createExerciseWithTraining(@RequestBody @Valid ExerciseDto exerciseDto, @PathVariable Long trainingId){
         var training = trainingService.createTrainingQueryEntityById(trainingId);
         return ResponseEntity.ok(exerciseService.addExerciseWithTraining(exerciseDto, training));
     }

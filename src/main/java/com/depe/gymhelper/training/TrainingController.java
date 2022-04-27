@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -51,7 +53,7 @@ class TrainingController {
     }
 
     @PostMapping
-    ResponseEntity<Long> createTraining(@RequestBody TrainingDto TrainingDto) {
+    ResponseEntity<Long> createTraining(@RequestBody @Valid TrainingDto TrainingDto) {
         return ResponseEntity.ok(trainingService.addTraining(TrainingDto));
     }
 
@@ -62,7 +64,7 @@ class TrainingController {
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<?> updateTraining(@PathVariable Long id, @RequestBody TrainingDto trainingDto){
+    ResponseEntity<?> updateTraining(@PathVariable Long id, @RequestBody @Valid TrainingDto trainingDto){
         trainingService.updateTraining(id,trainingDto);
         return ResponseEntity.noContent().build();
     }

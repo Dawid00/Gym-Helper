@@ -1,5 +1,7 @@
 package com.depe.gymhelper.user;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,6 +11,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,8 +25,16 @@ class User {
     @Id
     @GeneratedValue
     private Long id;
+    @NotNull(message = "Email is mandatory")
+    @NotEmpty
+    @Email
     private String email;
+    @NotNull
+    @NotBlank(message = "Username is mandatory")
+    @Length(min = 5, max = 25)
     private String username;
+    @NotNull
+    @NotBlank(message = "Password is mandatory")
     private String password;
     @Embedded
     private AthleteInfo athleteInfo;

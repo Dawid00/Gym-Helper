@@ -25,12 +25,12 @@ class AuthenticationController {
     }
 
     @PostMapping("/register")
-    void registerUser(@RequestBody RegisterUserRequest registerUserRequest){
+    void registerUser(@Valid @RequestBody RegisterUserRequest registerUserRequest){
         userService.createUser(registerUserRequest);
     }
 
     @PostMapping("/login")
-    ResponseEntity<AuthenticationResponseDto> loginUser(@RequestBody AuthenticationRequestDto authenticationRequestDto){
+    ResponseEntity<AuthenticationResponseDto> loginUser(@Valid@ RequestBody AuthenticationRequestDto authenticationRequestDto){
         return ResponseEntity.ok(authenticationService.authenticateUser(authenticationRequestDto));
     }
 

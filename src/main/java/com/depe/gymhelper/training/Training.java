@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
@@ -20,7 +21,9 @@ class Training {
     private Long id;
     private String description;
     @Enumerated(EnumType.STRING)
+    @NotNull(message = "Training must have status")
     private TrainingStatus status;
+    @NotNull(message = "Training must have date")
     private LocalDateTime date;
     @ManyToOne
     @JoinColumn(name = "user_id")

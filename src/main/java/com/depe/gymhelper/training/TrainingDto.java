@@ -1,11 +1,14 @@
 package com.depe.gymhelper.training;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 public class TrainingDto {
 
     private String description;
+    @NotNull(message = "Training must have status")
     private TrainingStatus status;
+    @NotNull(message = "Training must have date")
     private LocalDateTime date;
 
     public TrainingDto(String description, TrainingStatus status, LocalDateTime date) {
