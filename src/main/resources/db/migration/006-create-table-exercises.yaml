@@ -19,7 +19,7 @@ databaseChangeLog:
                      constraints:
                        nullable: false
                 -  column:
-                     name:  series
+                     name:  sets
                      type:  int
                      constraints:
                        nullable: false
