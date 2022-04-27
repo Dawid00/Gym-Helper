@@ -64,7 +64,7 @@ class TrainingIntegrationTest {
                 "email@gmail.com",
                 "testUser",
                 "testPassword",
-                85L,
+                75.0,
                 185L
         );
         Long id = userService.createUser(registerRequest);
@@ -121,7 +121,6 @@ class TrainingIntegrationTest {
         assertThat(training.getDescription()).isEqualTo("New description");
         assertThat(training.getStatus()).isEqualTo(PLANNED);
     }
-
 
     @ParameterizedTest
     @MethodSource("provideFiltersForTraining")

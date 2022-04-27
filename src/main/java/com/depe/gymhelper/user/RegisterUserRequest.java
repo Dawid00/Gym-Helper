@@ -16,16 +16,13 @@ public class RegisterUserRequest {
     private String username;
     @NotNull
     private String password;
-    @NotNull()
-    @Min(value = 1, message = "Its not possible")
-    @Max(value = 1000,  message = "Its not possible")
-    private Long weight;
+    private @NotNull() @Min(value = 1, message = "Its not possible") @Max(value = 1000, message = "Its not possible") Double weight;
     @NotNull
     @Min(value = 1, message = "Its not possible")
     @Max(value = 250,  message = "Its not possible")
     private Long height;
 
-    public RegisterUserRequest(String email, String username, String password, Long weight, Long height) {
+    public RegisterUserRequest(String email, String username, String password, @NotNull() @Min(value = 1, message = "Its not possible") @Max(value = 1000, message = "Its not possible") Double weight, Long height) {
         this.email = email;
         this.username = username;
         this.password = password;
@@ -36,11 +33,11 @@ public class RegisterUserRequest {
     public RegisterUserRequest() {
     }
 
-    public Long getWeight() {
+    public @NotNull() @Min(value = 1, message = "Its not possible") @Max(value = 1000, message = "Its not possible") Double getWeight() {
         return weight;
     }
 
-    public void setWeight(Long weight) {
+    public void setWeight(@NotNull() @Min(value = 1, message = "Its not possible") @Max(value = 1000, message = "Its not possible") Double weight) {
         this.weight = weight;
     }
 

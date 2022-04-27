@@ -48,7 +48,7 @@ class ExerciseIntegrationTest {
                 "email@gmail.com",
                 "testUser",
                 "testPassword",
-                85L,
+                75.0,
                 185L
         );
         Long id = userService.createUser(registerRequest);
