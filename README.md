@@ -6,10 +6,6 @@ and available at https://gym-helper-dp.herokuapp.com/api
 I've used:
 Java, Spring Boot, PostgreSql, Liquibase
 
-TODO:
-* more tests
-* validation for password
-* exception handlers
 ## Table of contents
 * [Description](#Description)
 * [Endpoints](#Endpoints)
@@ -22,8 +18,15 @@ You can:
 * see list of example type of exercises
 
 
+
 Every user's data is stored in database, where are tables: users, roles, users_roles, exercises, trainings.
 I used JWT for authorization user.
+
+TODO:
+* more tests
+* validation for password
+* exception handlers
+* refresh token feature
 
 
 ## Endpoints
@@ -32,12 +35,12 @@ I used JWT for authorization user.
 `https://gym-helper-dp.herokuapp.com/api`
 ### Auth
 
-| Method | Url | Description | Example Valid Request Body | 
-| ------ | --- | ---------- | --------------------------- |
-| POST   | /api/auth/register| Sign up | [JSON](#register) |
-| POST   | /api/auth/login | Log in | [JSON](#login) |
-| GET    | /api/users/check/username | Check if username is available to register |[JSON](#checkusername) |
-| GET    | /api/users/check/email | Check if email is available to register |[JSON](#checkemail) |
+| Method | Url                      | Description | Example Valid Request Body | 
+| ------ |--------------------------| ---------- | --------------------------- |
+| POST   | /api/auth/register       | Sign up | [JSON](#register) |
+| POST   | /api/auth/login          | Log in | [JSON](#login) |
+| GET    | /api/auth/check/username | Check if username is available to register |[JSON](#checkusername) |
+| GET    | /api/auth/check/email    | Check if email is available to register |[JSON](#checkemail) |
 
 
 ### Users
@@ -161,14 +164,14 @@ I used JWT for authorization user.
   "weight": 80
 }
 ```
-##### <a id="changepassword">Change password : /api/auth/change/password</a>
+##### <a id="changepassword">Change password : /api/users/change/password</a>
 ```json
 {
   "password": "Footballer29!"
 }
 ```
 
-##### <a id="changeemail">Change Email : /api/auth/change/email</a>
+##### <a id="changeemail">Change Email : /api/users/change/email</a>
 ```json
 {
   "email": "katar2022@gmail.com"
@@ -207,7 +210,7 @@ I used JWT for authorization user.
   "type":"PULL_UP"
 }
 ```
-##### <a id="exerciseupdate">Update exercise :	/api/trainings/{trainingId}/exercises/{id}</a>
+##### <a id="exerciseupdate">Update exercise :	/api/exercises/{id}</a>
 ```json
 {
   "reps":10
