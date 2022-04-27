@@ -1,5 +1,6 @@
 package com.depe.gymhelper.exercise;
 
+import com.depe.gymhelper.training.TrainingQueryEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-public class ExerciseServiceTest {
+class ExerciseServiceTest {
 
     private ExerciseFactory exerciseFactory;
     private ExerciseRepository exerciseRepository;
@@ -32,10 +33,11 @@ public class ExerciseServiceTest {
         exercise.setReps(5);
         exercise.setSets(3);
         ExerciseDto exerciseDto = new ExerciseDto(3,25.0,5, ROW);
+        TrainingQueryEntity training = new TrainingQueryEntity(1L, "description");
         //when
-        when(exerciseFactory.fromDto(exerciseDto, null)).thenReturn(exercise);
+        when(exerciseFactory.fromDto(exerciseDto, training)).thenReturn(exercise);
         when(exerciseRepository.save(exercise)).thenReturn(exercise);
-        underTest.addExercise(exerciseDto);
+        underTest.addExerciseWithTraining(exerciseDto, training);
         //then
         verify(exerciseRepository, times(1)).save(exercise);
     }

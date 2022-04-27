@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("test")
 @Transactional
 @WithMockUser(username = "testUser", password = "testPassword")
-public class ExerciseIntegrationTest {
+class ExerciseIntegrationTest {
 
     @Autowired
     ExerciseRepository exerciseRepository;
@@ -59,8 +59,10 @@ public class ExerciseIntegrationTest {
     void shouldReturnListOfExercisesWithOneExercise(){
         //given
         ExerciseDto exerciseDto = new ExerciseDto(3,25.0,6,ROW);
+        Long trainingId = initDatabaseWithTraining();
+        var training = trainingService.createTrainingQueryEntityById(trainingId);
         //when
-        underTest.addExercise(exerciseDto);
+        underTest.addExerciseWithTraining(exerciseDto, training);
         var result = exerciseRepository.findAll();
         //then
         assertThat(result).hasSize(1);
@@ -68,7 +70,6 @@ public class ExerciseIntegrationTest {
         assertThat(result.get(0).getWeight()).isEqualTo(25.0);
         assertThat(result.get(0).getType()).isEqualTo(ROW);
         assertThat(result.get(0).getSets()).isEqualTo(3);
-        assertThat(result.get(0).getTraining()).isEqualTo(null);
     }
 
     @Test
@@ -110,11 +111,14 @@ public class ExerciseIntegrationTest {
     }
 
     private Exercise initDatabaseWithExercise(){
+        Long id = initDatabaseWithTraining();
+        var training = new TrainingQueryEntity(id, "desc");
         var exercise = new Exercise();
         exercise.setSets(6);
         exercise.setReps(4);
         exercise.setType(OHP);
         exercise.setWeight(40.0);
+        exercise.setTraining(training);
         return exerciseRepository.save(exercise);
     }
 

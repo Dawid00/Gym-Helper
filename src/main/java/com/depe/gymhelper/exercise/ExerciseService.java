@@ -22,11 +22,6 @@ public class ExerciseService {
         return exerciseRepository.save(toSave).getId();
     }
 
-    public Long addExercise(ExerciseDto exerciseDto) {
-        var toSave = exerciseFactory.fromDto(exerciseDto,null);
-        return exerciseRepository.save(toSave).getId();
-    }
-
     public ExerciseType[] getAllTypeOfExercises() {
         return ExerciseType.values();
     }
