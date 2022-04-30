@@ -1,7 +1,6 @@
 package com.depe.gymhelper.user;
 
 import org.hibernate.validator.constraints.Length;
-
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -55,10 +54,6 @@ class User {
 
     Set<Role> getRoles() {
         return roles;
-    }
-
-    void setRoles(Set<Role> roles) {
-        this.roles = roles;
     }
 
     Long getId() {
