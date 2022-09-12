@@ -1,14 +1,14 @@
 package com.depe.gymhelper.training;
 
+import com.depe.gymhelper.training.filter.TrainingFilter;
 import com.depe.gymhelper.user.AuthenticationUserService;
 import com.depe.gymhelper.user.UserQueryEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 @Service
 public class TrainingService {
@@ -18,7 +18,6 @@ public class TrainingService {
     private final TrainingQueryRepository trainingQueryRepository;
     private final TrainingFactory trainingFactory;
 
-
     public TrainingService(final TrainingRepository trainingRepository, final AuthenticationUserService authenticationUserService, final TrainingQueryRepository trainingQueryRepository, final TrainingFactory trainingFactory) {
         this.trainingRepository = trainingRepository;
         this.authenticationUserService = authenticationUserService;
@@ -26,63 +25,56 @@ public class TrainingService {
         this.trainingFactory = trainingFactory;
     }
 
-    public Long addTraining(TrainingDto trainingDto){
-        var user  = authenticationUserService.getLoggedUser();
+    public Long addTraining(TrainingDto trainingDto) {
+        var user = authenticationUserService.getLoggedUser();
         var toSave = trainingFactory.fromDto(trainingDto, user);
         return trainingRepository.save(toSave).getId();
     }
 
-    public TrainingQueryEntity createTrainingQueryEntityById(Long trainingId) {
-        var training = getTrainingById(trainingId);
-        return new TrainingQueryEntity(training.getId(), training.getDescription());
-    }
 
     @Transactional
     public void changeStatus(Long id, String status) {
         Training training = getTrainingById(id);
-        switch(status.toUpperCase(Locale.ROOT)){
-            case "PLANNED" -> training.setStatus(TrainingStatus.PLANNED);
-            case "DONE" -> training.setStatus(TrainingStatus.DONE);
-            default -> throw new IllegalArgumentException("wrong status:" + status);
-        }
+        training.changeStatus(status);
     }
 
     @Transactional
     public void updateTraining(Long trainingId, TrainingDto trainingDto) {
         var training = getTrainingById(trainingId);
-        trainingFactory.updateFromDto(trainingDto, training);
+        training.update(trainingDto.getDescription(), trainingDto.getDate(), trainingDto.getStatus());
+    }
+
+    public TrainingQueryEntity getTrainingQueryEntityById(Long trainingId) {
+        var training = getTrainingById(trainingId);
+        return trainingFactory.createTrainingQueryEntityById(training.getId(), training.getDescription());
     }
 
     @Transactional
+
     public void deleteTraining(Long trainingId) {
         trainingRepository.deleteById(trainingId);
     }
 
-    public List<TrainingQueryDto> getFilteredTrainings(Map<String, String> filter) {
-        final String DATE_SUFFIX = "T00:00:00.00000";
+    public List<TrainingQueryDto> getFilteredTrainings(TrainingFilter filter) {
         var user = authenticationUserService.getLoggedUser();
-        if (isStatusFilter(filter) && isDateFilter(filter)) {
-            LocalDateTime from = LocalDateTime.parse(filter.get("from") + DATE_SUFFIX);
-            LocalDateTime to = LocalDateTime.parse(filter.get("to") + DATE_SUFFIX);
-            TrainingStatus status = TrainingStatus.valueOf(filter.get("status").toUpperCase(Locale.ROOT));
-            return getTrainingsByStatusBetweenDates(
-                    from,
-                    to,
-                    status,
+        return getFilteredTrainingsByUser(user, filter);
+    }
+
+    private List<TrainingQueryDto> getFilteredTrainingsByUser(UserQueryEntity user, TrainingFilter filter) {
+        return switch (filter.getFilterType()) {
+            case STATUS -> getTrainingsByStatus(filter.getStatus(), user);
+            case STATUS_DATE -> getTrainingsByStatusBetweenDates(
+                    filter.getFrom(),
+                    filter.getTo(),
+                    filter.getStatus(),
                     user);
-        }
-        if (isStatusFilter(filter)) {
-            return getTrainingsByStatus(TrainingStatus.valueOf(filter.get("status").toUpperCase(Locale.ROOT)), user);
-        } else if (isDateFilter(filter)) {
-            LocalDateTime from = LocalDateTime.parse(filter.get("from") + DATE_SUFFIX);
-            LocalDateTime to = LocalDateTime.parse(filter.get("to") + DATE_SUFFIX);
-            return getTrainingsBetweenDates(from, to, user);
-        }
-        return Collections.emptyList();
+            case DATE -> getTrainingsBetweenDates(filter.getFrom(), filter.getTo(), user);
+            default -> Collections.emptyList();
+        };
     }
 
     private Training getTrainingById(Long id) {
-        return trainingRepository.findById(id).orElseThrow(()-> new TrainingNotFoundException(id));
+        return trainingRepository.findById(id).orElseThrow(() -> new TrainingNotFoundException(id));
     }
 
     private List<TrainingQueryDto> getTrainingsBetweenDates(LocalDateTime from, LocalDateTime to, UserQueryEntity user) {
@@ -96,13 +88,4 @@ public class TrainingService {
     private List<TrainingQueryDto> getTrainingsByStatusBetweenDates(LocalDateTime from, LocalDateTime to, TrainingStatus status, UserQueryEntity user) {
         return trainingQueryRepository.findAllDtoBetweenDateByStatusAndUser(from, to, status, user);
     }
-
-    private boolean isDateFilter(Map<String, String> filter) {
-        return filter.containsKey("from") && filter.containsKey("to");
-    }
-
-    private boolean isStatusFilter(Map<String, String> filter) {
-        return filter.containsKey("status");
-    }
 }
-

@@ -1,12 +1,13 @@
-package com.depe.gymhelper.exercise;
+package com.depe.gymhelper.training.exercise;
 
 import com.depe.gymhelper.training.TrainingQueryEntity;
+import com.depe.gymhelper.training.exercise.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static com.depe.gymhelper.exercise.ExerciseType.ROW;
+import static com.depe.gymhelper.training.exercise.ExerciseType.ROW;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;

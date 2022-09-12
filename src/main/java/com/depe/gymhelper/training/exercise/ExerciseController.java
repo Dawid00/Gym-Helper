@@ -1,4 +1,4 @@
-package com.depe.gymhelper.exercise;
+package com.depe.gymhelper.training.exercise;
 
 
 import com.depe.gymhelper.training.TrainingService;
@@ -45,13 +45,13 @@ class ExerciseController {
 
     @PostMapping("/trainings/{trainingId}/exercises")
     ResponseEntity<Long> createExerciseWithTraining(@RequestBody @Valid ExerciseDto exerciseDto, @PathVariable Long trainingId){
-        var training = trainingService.createTrainingQueryEntityById(trainingId);
+        var training = trainingService.getTrainingQueryEntityById(trainingId);
         return ResponseEntity.ok(exerciseService.addExerciseWithTraining(exerciseDto, training));
     }
 
     @PostMapping("/trainings/{trainingId}/exercises/random")
     ResponseEntity<?> addRandomExerciseToTrainingWithId(@PathVariable Long trainingId){
-        var training = trainingService.createTrainingQueryEntityById(trainingId);
+        var training = trainingService.getTrainingQueryEntityById(trainingId);
         exerciseService.addRandomExerciseToTraining(training);
         return ResponseEntity.status(204).build();
     }

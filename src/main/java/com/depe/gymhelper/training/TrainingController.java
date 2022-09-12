@@ -1,21 +1,13 @@
 package com.depe.gymhelper.training;
 
+import com.depe.gymhelper.training.filter.TrainingFilter;
 import com.depe.gymhelper.user.AuthenticationUserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/trainings")
@@ -24,14 +16,16 @@ class TrainingController {
     private final TrainingService trainingService;
     private final TrainingQueryRepository trainingQueryRepository;
     private final AuthenticationUserService authenticationUserService;
+    private final TrainingFactory trainingFactory;
 
     public TrainingController(
             final TrainingService trainingService,
             final TrainingQueryRepository trainingQueryRepository,
-            final AuthenticationUserService authenticationUserService) {
+            final AuthenticationUserService authenticationUserService, TrainingFactory trainingFactory) {
         this.trainingService = trainingService;
         this.trainingQueryRepository = trainingQueryRepository;
         this.authenticationUserService = authenticationUserService;
+        this.trainingFactory = trainingFactory;
     }
 
     @GetMapping
@@ -43,17 +37,22 @@ class TrainingController {
     ResponseEntity<TrainingQueryDto> getTrainingById(@PathVariable Long id) {
         return ResponseEntity.ok(
                 trainingQueryRepository.findDtoByIdAndUser(
-                    id,
-                    authenticationUserService.getLoggedUser()).orElseThrow(() -> new TrainingNotFoundException(id)));
+                        id,
+                        authenticationUserService.getLoggedUser()).orElseThrow(() -> new TrainingNotFoundException(id)));
     }
 
     @GetMapping("/filter")
-    ResponseEntity<List<TrainingQueryDto>> getFilteredTrainings(@RequestParam Map<String, String> filter) {
-        return ResponseEntity.ok(trainingService.getFilteredTrainings(filter));
+    ResponseEntity<List<TrainingQueryDto>> getFilteredTrainings(
+            @RequestParam(required = false) LocalDateTime from,
+            @RequestParam(required = false) LocalDateTime to,
+            @RequestParam(required = false) TrainingStatus status
+    ) {
+        TrainingFilter trainingFilter = new TrainingFilter(status, from, to);
+        return ResponseEntity.ok(trainingService.getFilteredTrainings(trainingFilter));
     }
 
     @PostMapping
-    ResponseEntity<Long> createTraining( @Valid @RequestBody TrainingDto TrainingDto) {
+    ResponseEntity<Long> createTraining(@Valid @RequestBody TrainingDto TrainingDto) {
         return ResponseEntity.ok(trainingService.addTraining(TrainingDto));
     }
 
@@ -64,13 +63,13 @@ class TrainingController {
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<?> updateTraining(@PathVariable Long id, @RequestBody @Valid TrainingDto trainingDto){
-        trainingService.updateTraining(id,trainingDto);
+    ResponseEntity<?> updateTraining(@PathVariable Long id, @RequestBody @Valid TrainingDto trainingDto) {
+        trainingService.updateTraining(id, trainingDto);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity<?> deleteTraining(@PathVariable Long id){
+    ResponseEntity<?> deleteTraining(@PathVariable Long id) {
         trainingService.deleteTraining(id);
         return ResponseEntity.noContent().build();
     }

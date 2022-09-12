@@ -7,7 +7,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "trainings")
-public class TrainingQueryEntity {
+public class  TrainingQueryEntity {
 
     @Id
     @GeneratedValue

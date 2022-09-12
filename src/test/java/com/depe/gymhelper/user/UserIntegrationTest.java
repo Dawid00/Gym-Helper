@@ -1,19 +1,19 @@
 package com.depe.gymhelper.user;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -35,14 +35,10 @@ class UserIntegrationTest {
     private UserService underTest;
     @Autowired
     private PasswordEncoder passwordEncoder;
-    @Autowired
-    private AuthenticationUserService authenticationUserService;
-    @Autowired
-    private AuthenticationManager authenticationManager;
 
     @ParameterizedTest
     @MethodSource("provideUsernames")
-    void shouldCheckUsername(String username, boolean expected){
+    void shouldCheckUsername(String username, boolean expected) {
         //given
         initDatabaseWithTestUser();
         //when
@@ -54,7 +50,7 @@ class UserIntegrationTest {
 
     @ParameterizedTest
     @MethodSource("provideEmails")
-    void shouldCheckEmail(String email, boolean expected){
+    void shouldCheckEmail(String email, boolean expected) {
         //given
         initDatabaseWithTestUser();
         //when
@@ -64,7 +60,7 @@ class UserIntegrationTest {
     }
 
     @Test
-    void shouldChangeEmail(){
+    void shouldChangeEmail() {
         var user = initDatabaseWithTestUser();
         //when
         underTest.changeEmail(new EmailRequest("new@gmail.com"));
@@ -73,7 +69,7 @@ class UserIntegrationTest {
     }
 
     @Test
-    void shouldChangePassword(){
+    void shouldChangePassword() {
         //when
         var user = initDatabaseWithTestUser();
         var oldPassword = user.getPassword();
@@ -83,7 +79,7 @@ class UserIntegrationTest {
     }
 
     @Test
-    void shouldCreateUser(){
+    void shouldCreateUser() {
         //given
         RegisterUserRequest registerUserRequest = new RegisterUserRequest();
         registerUserRequest.setUsername("user123");
@@ -100,7 +96,7 @@ class UserIntegrationTest {
     }
 
     @Test
-    void shouldDeleteUserById(){
+    void shouldDeleteUserById() {
         //given
         Long id = userRepository.save(new User(
                 "depe@gmail.com",
@@ -116,7 +112,7 @@ class UserIntegrationTest {
     }
 
     @Test
-    void shouldDeleteLoggedUser(){
+    void shouldDeleteLoggedUser() {
         //given
         initDatabaseWithTestUser();
         //when
@@ -127,7 +123,7 @@ class UserIntegrationTest {
     }
 
     @Test
-    void shouldGiveAdminRoleToUser(){
+    void shouldGiveAdminRoleToUser() {
         //given
         var user = initDatabaseWithTestUser();
         //when
@@ -139,11 +135,12 @@ class UserIntegrationTest {
                 .collect(Collectors.toSet());
         //then
         assertThat(result).hasSize(2);
-        assertThat(nameOfRole.containsAll(Set.of("ROLE_USER","ROLE_ADMIN"))).isTrue();
+        assertThat(nameOfRole.contains("ROLE_USER")).isTrue();
+        assertThat(nameOfRole.contains("ROLE_ADMIN")).isTrue();
     }
 
     @Test
-    void shouldTakeAdminRoleToUser(){
+    void shouldTakeAdminRoleToUser() {
         //given
         var user = initDatabaseWithTestUser();
         user.addRole(roleRepository.findByType(ADMIN));
@@ -160,7 +157,7 @@ class UserIntegrationTest {
     }
 
     @Test
-    void shouldGetQueryUserByUsername(){
+    void shouldGetQueryUserByUsername() {
         //given
         var expectedId = initDatabaseWithTestUser().getId();
         //when
@@ -171,7 +168,7 @@ class UserIntegrationTest {
     }
 
     @Test
-    void shouldGetAllUsers(){
+    void shouldGetAllUsers() {
         var testUser = initDatabaseWithTestUser();
         //when
         var results = underTest.getAllUsers();
@@ -181,7 +178,7 @@ class UserIntegrationTest {
     }
 
     @Test
-    void shouldUpdateUserByUsername(){
+    void shouldUpdateUserByUsername() {
         //given
         initDatabaseWithTestUser();
         RegisterUserRequest registerUserRequest = new RegisterUserRequest();
@@ -192,7 +189,7 @@ class UserIntegrationTest {
         registerUserRequest.setWeight(89.0);
         var user = userRepository.findAll().get(0);
         //when
-        underTest.updateUserByUsername("testUser",registerUserRequest);
+        underTest.updateUserByUsername("testUser", registerUserRequest);
         //then
         assertThat(user.getUsername()).isEqualTo("user123");
         assertThat(user.getAthleteInfo().getHeight()).isEqualTo(195L);
@@ -200,7 +197,7 @@ class UserIntegrationTest {
     }
 
     @Test
-    void shouldUpdateLoggedUser(){
+    void shouldUpdateLoggedUser() {
         //given
         initDatabaseWithTestUser();
         RegisterUserRequest registerUserRequest = new RegisterUserRequest();
@@ -220,7 +217,7 @@ class UserIntegrationTest {
     }
 
     @Test
-    void shouldDeleteUserByUsername(){
+    void shouldDeleteUserByUsername() {
         //given
         Long id = userRepository.save(new User(
                 "depe@gmail.com",
@@ -236,27 +233,35 @@ class UserIntegrationTest {
     }
 
 
-    private User initDatabaseWithTestUser(){
-        var user = new User(
-                "testUser@gmail.com",
-                "testUser",
-                passwordEncoder.encode("test"),
-                new AthleteInfo(185L, 75.0));
-        user.addRole(roleRepository.findByType(USER));
-        return userRepository.save(user);
+    private User initDatabaseWithTestUser() {
+
+        if (userRepository.findByUsername("testUser").isEmpty()) {
+            var user = new User(
+                    "testUser@gmail.com",
+                    "testUser",
+                    passwordEncoder.encode("test"),
+                    new AthleteInfo(185L, 75.0));
+            user.addRole(roleRepository.findByType(USER));
+            userRepository.findAll();
+            return userRepository.save(user);
+        }
+        else{
+            return userRepository.findByUsername("testUser").get();
+
+        }
     }
 
-    private static Stream<Arguments> provideUsernames(){
+    private static Stream<Arguments> provideUsernames() {
         return Stream.of(
-                Arguments.of("testUser",false),
-                Arguments.of("newUsername",true)
+                Arguments.of("testUser", false),
+                Arguments.of("newUsername", true)
         );
     }
 
-    private static Stream<Arguments> provideEmails(){
+    private static Stream<Arguments> provideEmails() {
         return Stream.of(
-                Arguments.of("testUser@gmail.com",false),
-                Arguments.of("new@email.com",true)
+                Arguments.of("testUser@gmail.com", false),
+                Arguments.of("new@email.com", true)
         );
     }
 }

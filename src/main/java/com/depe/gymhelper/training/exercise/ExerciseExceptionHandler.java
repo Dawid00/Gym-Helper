@@ -1,4 +1,4 @@
-package com.depe.gymhelper.exercise;
+package com.depe.gymhelper.training.exercise;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;

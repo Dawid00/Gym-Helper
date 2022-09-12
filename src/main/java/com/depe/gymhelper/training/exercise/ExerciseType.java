@@ -1,4 +1,4 @@
-package com.depe.gymhelper.exercise;
+package com.depe.gymhelper.training.exercise;
 
 enum ExerciseType {
     PULL_UP("pull up", "back"),

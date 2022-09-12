@@ -1,9 +1,13 @@
-package com.depe.gymhelper.exercise;
+package com.depe.gymhelper.training.exercise;
 
 
 import com.depe.gymhelper.training.TrainingDto;
 import com.depe.gymhelper.training.TrainingQueryEntity;
 import com.depe.gymhelper.training.TrainingService;
+import com.depe.gymhelper.training.exercise.Exercise;
+import com.depe.gymhelper.training.exercise.ExerciseDto;
+import com.depe.gymhelper.training.exercise.ExerciseRepository;
+import com.depe.gymhelper.training.exercise.ExerciseService;
 import com.depe.gymhelper.user.RegisterUserRequest;
 import com.depe.gymhelper.user.UserQueryEntity;
 import com.depe.gymhelper.user.UserService;
@@ -17,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static com.depe.gymhelper.exercise.ExerciseType.*;
+import static com.depe.gymhelper.training.exercise.ExerciseType.*;
 import static com.depe.gymhelper.training.TrainingStatus.DONE;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -60,7 +64,7 @@ class ExerciseIntegrationTest {
         //given
         ExerciseDto exerciseDto = new ExerciseDto(3,25.0,6,ROW);
         Long trainingId = initDatabaseWithTraining();
-        var training = trainingService.createTrainingQueryEntityById(trainingId);
+        var training = trainingService.getTrainingQueryEntityById(trainingId);
         //when
         underTest.addExerciseWithTraining(exerciseDto, training);
         var result = exerciseRepository.findAll();

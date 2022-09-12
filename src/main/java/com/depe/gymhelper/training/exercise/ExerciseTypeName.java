@@ -1,4 +1,4 @@
-package com.depe.gymhelper.exercise;
+package com.depe.gymhelper.training.exercise;
 
 public interface ExerciseTypeName {
     String getName();

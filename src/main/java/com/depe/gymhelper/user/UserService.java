@@ -80,7 +80,6 @@ public class UserService {
         User user = getUserByUsername(username);
         Role admin = roleRepository.findByType(RoleType.ADMIN);
         user.addRole(admin);
-
     }
 
     @Transactional

@@ -7,22 +7,15 @@ import java.time.LocalDateTime;
 @Service
 class TrainingFactory {
 
-    Training fromDto(TrainingDto TrainingDto, UserQueryEntity userQueryEntity){
-        var training = new Training();
-        training.setDescription(TrainingDto.getDescription());
-        training.setStatus(TrainingDto.getStatus());
-        training.setDate(TrainingDto.getDate());
-        if(training.getDate() == null){
-            training.setDate(LocalDateTime.now());
-        }
-        training.setUser(userQueryEntity);
-        return training;
+    Training fromDto(TrainingDto trainingDto, UserQueryEntity userQueryEntity) {
+        return new Training(
+                trainingDto.getDescription(),
+                trainingDto.getStatus(),
+                trainingDto.getDate() == null ? LocalDateTime.now(): trainingDto.getDate(),
+                userQueryEntity);
     }
 
-
-    public void updateFromDto(TrainingDto trainingDto, Training training) {
-        training.setStatus(trainingDto.getStatus());
-        training.setDate(trainingDto.getDate());
-        training.setDescription(trainingDto.getDescription());
+    public TrainingQueryEntity createTrainingQueryEntityById(Long trainingId, String description) {
+        return new TrainingQueryEntity(trainingId, description);
     }
 }

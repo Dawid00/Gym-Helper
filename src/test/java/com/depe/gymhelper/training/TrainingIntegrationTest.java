@@ -1,5 +1,6 @@
 package com.depe.gymhelper.training;
 
+import com.depe.gymhelper.training.filter.TrainingFilter;
 import com.depe.gymhelper.user.RegisterUserRequest;
 import com.depe.gymhelper.user.UserQueryEntity;
 import com.depe.gymhelper.user.UserService;
@@ -11,10 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
+
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Locale;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static com.depe.gymhelper.training.TrainingStatus.DONE;
@@ -46,7 +48,7 @@ class TrainingIntegrationTest {
 
     private void initDatabaseWithTrainings() {
         var user = initDatabaseWithTestUser();
-        LocalDateTime now = LocalDateTime.parse("2022-04-10T12:00:00.00000");
+        LocalDateTime now = LocalDateTime.parse("2022-04-10T00:00:00.00000");
         TrainingDto trainingDto = new TrainingDto("JTCNW", DONE, now);
         TrainingDto trainingDto2 = new TrainingDto("a", DONE, now.minusDays(4));
         TrainingDto trainingDto3 = new TrainingDto("b", PLANNED, now.plusDays(3));
@@ -92,7 +94,7 @@ class TrainingIntegrationTest {
         Long id = trainingRepository.save(training).getId();
 
         //when
-        var result = underTest.createTrainingQueryEntityById(id);
+        var result = underTest.getTrainingQueryEntityById(id);
         //then
         assertThat(result.getId()).isEqualTo(id);
         assertThat(result.getDescription()).isEqualTo("JTCNW");
@@ -126,17 +128,13 @@ class TrainingIntegrationTest {
     @MethodSource("provideFiltersForTraining")
     void shouldReturnListOfFilteredTrainingQueryDto(String from, String to, TrainingStatus trainingStatus, int size) {
         initDatabaseWithTrainings();
-        Map<String, String> dateFilter = new HashMap<>();
-        Map<String, String> statusFilter = new HashMap<>();
-        dateFilter.put("from", from);
-        dateFilter.put("to", to);
-        statusFilter.put("status", trainingStatus.name());
-        Map<String, String> filter = Stream.of(statusFilter, dateFilter)
-                .flatMap(map -> map.entrySet().stream())
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        Map.Entry::getValue));
-        var result = underTest.getFilteredTrainings(filter);
+        var lol = trainingRepository.findAll();
+        var result = underTest.getFilteredTrainings(
+                new TrainingFilter(
+                        trainingStatus,
+                        LocalDateTime.parse(from),
+                        LocalDateTime.parse(to)
+                ));
         assertThat(result).hasSize(size);
     }
 
@@ -155,13 +153,13 @@ class TrainingIntegrationTest {
         assertThat(training.getStatus()).isEqualTo(newTrainingStatus);
     }
 
-        private static Stream<Arguments> provideFiltersForTraining() {
+    private static Stream<Arguments> provideFiltersForTraining() {
         return Stream.of(
-                Arguments.of("2022-04-09", "2022-04-11", DONE, 1),
-                Arguments.of("2022-04-09", "2022-04-11", PLANNED, 0),
-                Arguments.of("2022-04-01", "2022-04-30", DONE, 2),
-                Arguments.of("2022-04-01", "2022-04-30", PLANNED, 1),
-                Arguments.of("2021-04-01", "2021-04-30", PLANNED, 0)
+                Arguments.of("2022-04-09T00:00:00.000", "2022-04-11T00:00:00.000", DONE, 1),
+                Arguments.of("2022-04-09T00:00:00.000", "2022-04-11T00:00:00.000", PLANNED, 0),
+                Arguments.of("2022-04-01T00:00:00.000", "2022-04-30T00:00:00.000", DONE, 2),
+                Arguments.of("2022-04-01T00:00:00.000", "2022-04-30T00:00:00.000", PLANNED, 1),
+                Arguments.of("2021-04-01T00:00:00.000", "2021-04-30T00:00:00.000", PLANNED, 0)
 
         );
     }
