@@ -2,6 +2,8 @@ package com.depe.gymhelper.training.exercise;
 
 
 import com.depe.gymhelper.training.TrainingQueryEntity;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -17,6 +19,7 @@ class Exercise {
     private Double weight;
     private Integer reps;
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "training_id")
     private TrainingQueryEntity training;
 

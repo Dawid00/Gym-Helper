@@ -18,6 +18,7 @@ public class AuthenticationUserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails =  (UserDetails) authentication.getPrincipal();
         String username = userDetails.getUsername();
+//        String username = "rosa12";
         var user = userRepository.findByUsername(username).orElseThrow(()->new UserNotFoundException(username));
         return new UserQueryEntity(user.getId(), user.getUsername());
     }

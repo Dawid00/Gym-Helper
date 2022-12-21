@@ -3,19 +3,14 @@ package com.depe.gymhelper.training.exercise;
 
 import com.depe.gymhelper.training.TrainingService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin("*")
 class ExerciseController {
 
     private final ExerciseService exerciseService;
@@ -40,7 +35,8 @@ class ExerciseController {
 
     @GetMapping("/exercises/{id}")
     ResponseEntity<ExerciseQueryDto> getExerciseById(@PathVariable Long id){
-        return ResponseEntity.ok(exerciseQueryRepository.findDtoById(id).orElseThrow(RuntimeException::new));
+        return ResponseEntity.ok(exerciseQueryRepository.findDtoById(id));
+//        return ResponseEntity.ok(exerciseQueryRepository.findDtoById(id).orElseThrow(RuntimeException::new));
     }
 
     @PostMapping("/trainings/{trainingId}/exercises")

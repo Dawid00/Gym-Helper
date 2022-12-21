@@ -41,6 +41,7 @@ public class TrainingService {
     @Transactional
     public void updateTraining(Long trainingId, TrainingDto trainingDto) {
         var training = getTrainingById(trainingId);
+        System.out.println(trainingDto.getDescription());
         training.update(trainingDto.getDescription(), trainingDto.getDate(), trainingDto.getStatus());
     }
 

@@ -6,5 +6,5 @@ public interface ExerciseQueryDto {
     Double getWeight();
     Integer getReps();
     Long getTrainingId();
-    ExerciseTypeName getType();
+    String getType();
 }
