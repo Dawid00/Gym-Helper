@@ -1,7 +1,6 @@
 # Gym-Helper
 It is my first project to learn how create application using Spring Boot.
-I've tried to build feature-by-package architecture. The project is developed on Heroku
-and available at https://gym-helper-dp.herokuapp.com/api
+I've tried to build feature-by-package architecture.
 
 I've used:
 Java, Spring Boot, PostgreSql, Liquibase
