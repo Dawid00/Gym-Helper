@@ -30,8 +30,7 @@ TODO:
 
 ## Endpoints
 
-### Default api URL
-`https://gym-helper-dp.herokuapp.com/api`
+
 ### Auth
 
 | Method | Url                      | Description | Example Valid Request Body | 
